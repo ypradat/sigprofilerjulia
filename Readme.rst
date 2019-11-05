@@ -5,7 +5,7 @@ SigProfilerJulia
 
 |
 
-SigProfilerJulia aims to extract the mutational processes active in a tumor cohort. It is a fast parallel Julia implementation of the original MATLAB SigProfiler.
+SigProfilerJulia aims to extract the mutational processes active in a tumor cohort. It is a fast implementation in Julia of the original SigProfiler written in MATLAB.
 The original motivation for this implementation was that we did not have the MATLAB license to run SigProfiler with more than 12 cores in our local cluster.
 
 This software was developed by Oriol Pich, Ferran Muiños and Jordi Deu-Pons and was used in `Pich et al, The mutational footprints of cancer therapies <https://www.biorxiv.org/content/10.1101/683268v1>`_.
@@ -19,13 +19,13 @@ Using SigProfilerJulia
 ----------------------
 
 The input to SigProfilerJulia consists of a tab-separated values (tsv) file containing the counts of each mutational type or channel each of the tumor samples.
-The amount and type of channels depend on the nature of the variants (ej single-nucleotide variants, double-substitutions or short-indels). A single-nucleotide variant extraction typically relies on 96 channels (the trinucleotide context of the variant plus the alternate allele).
+The amount and type of channels depend on the nature of the variants (e.g. single-nucleotide variants, double-substitutions or short-indels). A single-nucleotide variant extraction typically relies on 96 channels (the trinucleotide context of the variant plus the alternate allele).
 
-We currently provide one script to create the 96-channel single-nucleotide variant in a fast way. Please see further details and one example in the `preprocessing folder  <https://bitbucket.org/bbglab/sigprofilerjulia/src/master/preprocessing/>`_.
-Double-substitutions or indel channel creation is not yet implemented here, however please refer to `The mutational footprints of cancer therapies repository  <https://bitbucket.org/bbglab/mutfootprints/src/master/>`_ where building the corresponding counts matrices is implemented (and also how to postprocess the outputs).
+We currently provide one script to create the 96-channel single-nucleotide variant count matrix in a easy and fast way. Please see further details and one example in the `preprocessing folder  <https://bitbucket.org/bbglab/sigprofilerjulia/src/master/preprocessing/>`_.
+Double-substitutions or indel channel creation is not yet implemented here, however please refer to `The mutational footprints of cancer therapies repository  <https://bitbucket.org/bbglab/mutfootprints/src/master/>`_ where the assembly of the corresponding counts matrices is implemented (and also how to postprocess the outputs).
 
 We also provide two postprocessing scripts, which will help the user to decide the number of signatures active in the tumors, as well
-as finding similar signatures in COSMIC and plotting all the extracted profiles. Please see further details in the `postprocessing folder  <https://bitbucket.org/bbglab/sigprofilerjulia/src/master/postprocessing/>`_.
+as finding similaries with signatures in COSMIC and plotting all the extracted profiles. Please see further details in the `postprocessing folder  <https://bitbucket.org/bbglab/sigprofilerjulia/src/master/postprocessing/>`_.
 
 |
 
@@ -33,7 +33,7 @@ as finding similar signatures in COSMIC and plotting all the extracted profiles.
 Software dependencies to run SigProfilerJulia
 ---------------------------------------------
 
-Julia binary must be downloaded from the `Julia downloads site  <https://julialang.org/downloads/>`_.
+Julia installables must be downloaded from the `Julia downloads site  <https://julialang.org/downloads/>`_.
 
 This package has been developed and tested using Julia 1.0.0.
 
@@ -44,7 +44,7 @@ To install them, please run:
 
   $ julia julia_dependencies.jl
 
-Where ``julia`` is the Julia executable. The path will vary depending on the OS system. Please see the `Platform specific instructions <https://julialang.org/downloads/platform.html>`_ for more insight.
+Where ``julia`` is the Julia binary. The path will vary depending on the OS system. Please see the `Platform specific instructions <https://julialang.org/downloads/platform.html>`_ for more insight.
 
 |
 
@@ -52,7 +52,7 @@ Where ``julia`` is the Julia executable. The path will vary depending on the OS 
 How to run SigProfilerJulia
 ---------------------------
 
-SigProfilerJulia is run in the command line. For a specific matrix count, it will explore a K range of different mutational processes active in the samples.
+SigProfilerJulia is run in the command line. For a specific matrix count, it will explore a range of numbers of active mutational processes in the samples.
 SigProfilerJulia also has a random seed implemented, to guarantee reproducibility between runs.
 
 |
@@ -60,7 +60,7 @@ SigProfilerJulia also has a random seed implemented, to guarantee reproducibilit
 Example
 -------
 
-The following command will evaluate the presence of different amount of mutational signatures in 21 WGS tumor breast samples.
+The following command carries out mutational signatures extraction in 21 WGS tumor breast samples.
 We will explore the presence from 2 to 10 mutational signatures, using 100 iterations (we strongly recommend using more than 1000 in real cases) and 3 CPUs.
 
 .. code-block::
@@ -117,7 +117,7 @@ SigProfilerJulia produces several output files for each of the number of signatu
 
 * ``processes_SigEval`` : matrix of processes of SigEval signatures.
 
-* ``processesStabAvg_SigEval`` : the stability of each of the SigEval processes.
+* ``processesStabAvg_SigEval`` : the stability of each of the SigEval processes. Stability essentially reflects how consistently each mutational process is recovered when the input count data is randomized, thereby giving a sense of how reliable the mutational process is.
 
 * ``avgStability_SigEval`` : average stability of SigEval processes.
 
@@ -127,7 +127,7 @@ SigProfilerJulia produces several output files for each of the number of signatu
 
 * ``reconErrorPercentage_SigEval`` : percentage of the above.
 
-* ``simError_SigEval`` : per sample reconstruction error of the original matrix count using the exposure count of SigEval processes using cosine distance as a measure.
+* ``simError_SigEval`` : per sample reconstruction error compared to the original matrix count using the exposure count of SigEval processes using cosine distance as a measure.
 
 * ``avgReconstructionError_SigEval`` : average reconstruction error of the original matrix count using the exposure count of SigEval processes.
 
