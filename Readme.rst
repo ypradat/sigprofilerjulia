@@ -8,7 +8,7 @@ SigProfilerJulia
 SigProfilerJulia aims to extract the mutational processes active in a tumor cohort. It is a fast implementation in Julia of the original SigProfiler written in MATLAB.
 The original motivation for this implementation was that we did not have the MATLAB license to run SigProfiler with more than 12 cores in our local cluster.
 
-This software was developed by Oriol Pich, Ferran Muiños and Jordi Deu-Pons and was used in `Pich et al, The mutational footprints of cancer therapies <https://www.biorxiv.org/content/10.1101/683268v1>`_.
+This software was developed by Oriol Pich, Ferran Muiños and Jordi Deu-Pons and was used in `Pich et al, The mutational footprints of cancer therapies, Nature Genetics, 2019 <https://doi.org/10.1038/s41588-019-0525-5>`_.
 
 |
 
@@ -152,7 +152,7 @@ SigProfilerJulia has been developed by Oriol Pich, Ferran Muiños and Jordi Deu-
 .. admonition:: Citation
    :class: note
 
-   Oriol Pich, Ferran Muiños, Martijn Paul Lolkema, Neeltje Steeghs, Abel Gonzalez-Perez, Nuria Lopez-Bigas, `The mutational footprints of cancer therapies <https://www.biorxiv.org/content/10.1101/683268v1>`_
+   Oriol Pich, Ferran Muiños, Martijn Paul Lolkema, Neeltje Steeghs, Abel Gonzalez-Perez, Nuria Lopez-Bigas, `The mutational footprints of cancer therapies, Nature Genetics, 2019 <https://doi.org/10.1038/s41588-019-0525-5>`_
 
 
 The original SigProfiler implementation is described in:
