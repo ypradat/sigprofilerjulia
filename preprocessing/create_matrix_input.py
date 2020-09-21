@@ -1,6 +1,6 @@
 import click
 import pandas as pd
-from bgreference import hg19, hg38
+from bgreference import refseq #hg19, hg38
 from collections import defaultdict
 from tqdm import tqdm
 
@@ -50,12 +50,12 @@ def snvs_order():
     return order
 
 
-def get_triplet(df, refseq):
+def get_triplet(df, genomeref):
     try:
-        triplet = refseq(df['CHROM'], df['POS'] - 1, 3)
+        triplet = refseq(genomeref, df['CHROM'], df['POS'] - 1, 3)
 
     except:
-        triplet = 'NOT_IN_CHROM'
+        triplet = 'NOT_IN_CHROM/genome reference not properly installed?'
 
     return triplet
 
@@ -77,11 +77,13 @@ def create_snvs_matrix(file, genome, output):
 
     print('Getting contexts...')
 
-    if genome == 'hg19':
-        snv_df['TRIPLET'] = snv_df.progress_apply(get_triplet, args=(hg19,), axis=1)
+    snv_df['TRIPLET'] = snv_df.progress_apply(get_triplet, args=(genome,), axis=1)
 
-    elif genome == 'hg38':
-        snv_df['TRIPLET']  = snv_df.progress_apply(get_triplet, args=(hg38,), axis=1)
+    #if genome == 'hg19':
+        #snv_df['TRIPLET'] = snv_df.progress_apply(get_triplet, args=(genome,), axis=1)
+
+    #elif genome == 'hg38':
+    #    snv_df['TRIPLET']  = snv_df.progress_apply(get_triplet, args=(hg38,), axis=1)
 
     # remove those variants that do not fall in normal chromosomes
     snv_df = snv_df[snv_df['TRIPLET'] != 'NOT_IN_CHROM']
@@ -105,7 +107,7 @@ def create_snvs_matrix(file, genome, output):
                 help="Input data",
                 required=True)
 @click.option('--genome_reference',
-                type=click.Choice(['hg19', 'hg38']),
+                #type=click.Choice(['hg19', 'hg38']),
                 help="Genome reference",
                 required = True)
 @click.option('--output_file',
