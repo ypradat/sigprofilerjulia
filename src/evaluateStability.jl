@@ -33,7 +33,7 @@ function evaluateStability(Wall, Hall, totalProcesses, totalReplicates)
         countIRep = 0
     
         for iRep = 1 : totalReplicates
-            allDist = pairwise(CosineDist(), hcat(centroids, Wall), dims=2)
+            allDist = Distances.pairwise(CosineDist(), hcat(centroids, Wall), dims=2)
             centroidDist = allDist[ 1:size(centroids, 2), (size(centroids, 2)+1):size(allDist, 2) ]'
 
             jRange = randperm(totalProcesses)
@@ -50,7 +50,7 @@ function evaluateStability(Wall, Hall, totalProcesses, totalReplicates)
             maxDistToNewCentroids = 0
             for i = 1 : size(centroids, 2)
                 centroids[:, i] = mean( Wall[:, idx .== i], dims=2 )
-                maxDistToNewCentroids = max(maxDistToNewCentroids, maximum(pairwise(CosineDist(), hcat(centroids[:, i], centroidsTest[:, i]), dims=2)))
+                maxDistToNewCentroids = max(maxDistToNewCentroids, maximum(Distances.pairwise(CosineDist(), hcat(centroids[:, i], centroidsTest[:, i]), dims=2)))
             end
 
             if maxDistToNewCentroids < CONVERG_CUTOFF
@@ -66,7 +66,7 @@ function evaluateStability(Wall, Hall, totalProcesses, totalReplicates)
         end
 
         for i = 1 : size(centroids, 2)
-            clusterDist = pairwise(CosineDist(), hcat(centroids[:,i], Wall[:, idx.==i]), dims=2)
+            clusterDist = Distances.pairwise(CosineDist(), hcat(centroids[:,i], Wall[:, idx.==i]), dims=2)
             clusterCompactness[i, :] = clusterDist[1, 2:size(clusterDist, 2)]
         end
 
@@ -101,13 +101,13 @@ function evaluateStability(Wall, Hall, totalProcesses, totalReplicates)
     if ( totalProcesses > 1)
         idxCount = countmap(idx)
         countVector = [get(idxCount, i, 0) for i in 1:maximum(idx)]
-        processStab = silhouettes(trunc.(Int, idx), countVector, pairwise(CosineDist(), Wall, dims=2))
+        processStab = silhouettes(trunc.(Int, idx), countVector, Distances.pairwise(CosineDist(), Wall, dims=2))
         processStabAvg = zeros(1, totalProcesses)
         for i = 1 : totalProcesses
             processStabAvg[i] = mean(processStab[idx.==i]) 
         end
     else 
-        allDist = pairwise(CosineDist(), hcat(centroids', Wall), dims=2)
+        allDist = Distances.pairwise(CosineDist(), hcat(centroids', Wall), dims=2)
         processStab = 1 - allDist[1:size(centroids', 2), (size(centroids', 2)+1): size(allDist, 2) ]'
         processStabAvg = mean(processStab)
     end

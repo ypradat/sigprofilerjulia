@@ -21,7 +21,7 @@
     subSignatures = allSignatures[:,findall(!iszero, exposures)];
 
     # JuMP model instance
-    model = Model(with_optimizer(Ipopt.Optimizer, print_level=0, sb="yes"));
+    model = Model(optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0, "sb" => "yes"));
 
     # set variables with bounds
     @variable(model, 0 <= x[i=1:numberOfSignatures] <= maxMutations, start=x0[i]);

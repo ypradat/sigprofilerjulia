@@ -16,7 +16,7 @@ function ParseCommands()
 
     s = ArgParseSettings()
 
-    @add_arg_table s begin
+    @add_arg_table! s begin
         "--mutation_file", "-f"
             help = "File with the matrix count"
             required = true
@@ -55,9 +55,9 @@ parsed_args = ParseCommands()
 numberWorkers = parsed_args["workers"]
 println("Adding workers...")
 if parsed_args["slurm"]
-    ClusterManagers.addprocs_slurm(numberWorkers)
+    ClusterManagers.addprocs_slurm(numberWorkers;exeflags="--project")
 else
-    addprocs(numberWorkers)
+    addprocs(numberWorkers;exeflags="--project")
 end
 
 # get the path where the script is located
